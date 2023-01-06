@@ -1,0 +1,41 @@
+﻿@page
+@model ContractsModel
+@{
+    ViewData["Title"] = "Cars";
+}
+
+<table id="filterabletable"
+       data-filter-control="true"
+       data-show-search-clear-button="false">
+    <thead>
+        <tr>
+            <th class="col-6 col-md-4" data-field="name" data-filter-control="input">@Html.DisplayNameFor(m => m.Contracts.First().CarId)</th>
+            <th class="col-2 col-md-2" data-field="start" data-filter-control="input">@Html.DisplayNameFor(m => m.Contracts.First().Start)</th>
+            <th class="col-2 col-md-2" data-field="finish" data-filter-control="input">@Html.DisplayNameFor(m => m.Contracts.First().Finish)</th>
+            <th class="col-1 col-md-2" data-field="debt" data-filter-control="input">@Html.DisplayNameFor(m => m.Contracts.First().Debt)</th>
+            <th class="col-1 col-md-2" data-field="penalty" data-filter-control="input">@Html.DisplayNameFor(m => m.Contracts.First().Penalty)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contract in Model.Contracts)
+        {
+            <tr class="bg-@contract.Status bg-opacity-50">
+                <td class="col-6 col-md-4"><a asp-page="/Contracts/Contract" asp-area="" asp-route-id="@contract?.Id" class="nav-link text-primary">@contract.ViewName</a></td>
+                <td class="col-2 col-md-2">@contract?.Start</td>
+                <td class="col-2 col-md-2">
+                    @if (contract is not null && contract.Endless)
+                    {
+                        @Html.DisplayNameFor(m => m.Contracts.First().Endless)
+                    }
+                    else
+                    {
+                        @contract?.Finish
+                        
+                    }
+                </td>
+                <td class="col-1 col-md-2">@contract?.Debt</td>
+                <td class="col-1 col-md-2">@contract?.Penalty</td>
+            </tr>
+        }
+    </tbody>
+</table>

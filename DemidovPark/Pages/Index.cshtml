@@ -1,0 +1,114 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<form asp-page-handler="Select" method="post">
+    <div class="row m-3">
+        <div class="input-group">
+            <select asp-for="SegmentId" asp-items="Model.Segments" class="form-control mb-3 col-12 col-md-3">
+                <option>Все</option>
+            </select>
+            <input asp-for="DateOne" class="form-control mb-3 col-12 col-md-3" />
+            <input asp-for="DateTwo" class="form-control mb-3 col-12 col-md-3" />
+            <div class="input-group-prepend col-12 col-md-3 mb-3">
+                <input id="show" class="btn w-100 btn-outline-primary" type="submit" value="Показать" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div asp-validation-summary="ModelOnly" class="alert alert-success m-3"></div>
+
+<div class="row m-3">
+    @foreach (var car in Model.Cars)
+    {
+        <div class="col-12 col-md-3">
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="card-title">@car.PublicName</h5>
+                </div>
+
+                <img class="card-img" src="@Url.Action("GetPhoto", "Photos", new { id = car.PhotoId })" onerror="this.style.display='none'" />
+
+                @if (@car.PublicDescription is not null && @car.PublicDescription != string.Empty)
+                {
+                    <div class="card-block p-3" style="white-space:pre-wrap">@car.PublicDescription</div>
+                }
+                
+                <div class="card-footer p-0">
+                    <div class="btn-wrapper text-center d-flex">
+                        <input class="btn btn-outline-primary w-100 js-modal" type="submit" value="Оставить заявку" data-bs-toggle="modal" data-bs-target="#modal" data-car-id="@car.Id" data-start="@Model.DateOne" data-finish="@Model.DateTwo" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form asp-page-handler="NewRequest" method="post">
+
+                <input id="carid" name="carid" type="hidden" />
+                <input id="start" name="start" type="hidden" />
+                <input id="finish" name="finish" type="hidden" />
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Новая заявка</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="input-group p-1">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">Тип</span>
+                        </div>
+                        <select asp-for="NewRequest.DistanceId" asp-items="Model.Distances" class="form-control"></select>
+                    </div>
+
+                    <div class="input-group p-1">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewRequest.PhoneNumber)</span>
+                        </div>
+                        <input asp-for="NewRequest.PhoneNumber" class="form-control">
+                    </div>
+
+                    <div class="input-group p-1">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewRequest.Comment)</span>
+                        </div>
+                        <textarea asp-for="NewRequest.Comment" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <input class="btn btn-outline-primary" type="submit" value="Отправить" />
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('.js-modal').on('click', function () {
+                const carId = $(this).attr('data-car-id');
+                const start = $(this).attr('data-start');
+                const finish = $(this).attr('data-finish');
+
+                $('#carid').val(carId);
+                $('#start').val(start);
+                $('#finish').val(finish);
+            });
+        });
+    </script>
+}

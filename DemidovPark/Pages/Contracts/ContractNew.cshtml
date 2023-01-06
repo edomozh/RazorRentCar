@@ -1,0 +1,146 @@
+﻿@page
+@model ContractNewModel
+@{
+    ViewData["Title"] = "New Contract";
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div>
+    <h1>Аренда: @Model.Contract?.Car?.Name</h1>
+</div>
+
+<form asp-page-handler="Rent">
+
+    <input asp-for="Contract.CarId" type="hidden" />
+
+    <div class="row mb-3">
+        <div class="col-12 col-md-6">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text h-100">От</span>
+                </div>
+                <input asp-for="Contract.Start" class="form-control" />
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6" id="Block_Finish">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text h-100">До</span>
+                </div>
+                <input asp-for="Contract.Finish" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <div class="input-group-text">
+                <span>@Html.DisplayNameFor(m => m.Contract.Endless)</span>
+            </div>
+        </div>
+        <div class="input-group-append">
+            <div class="input-group-text h-100">
+                <input asp-for="Contract.Endless" type="checkbox" class="form-check-input" onclick="calcAvailability('Block_Finish', this.checked)">
+            </div>
+        </div>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">Водитель</span>
+        </div>
+        <select asp-for="Contract.DriverId" asp-items="Model.Drivers" class="form-control">
+            <option>Выберите водителя</option>
+        </select>
+        <div class="input-group-prepend col-3">
+            <button type="button" class="btn btn-outline-primary col-1 w-100 h-100" data-bs-toggle="modal" data-bs-target="#newDriverModal">
+                <svg width="24" height="24" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Contract.Deposit)</span>
+        </div>
+        <input asp-for="Contract.Deposit" class="form-control">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Contract.Penalty)</span>
+        </div>
+        <input asp-for="Contract.Penalty" class="form-control">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Contract.Comment)</span>
+        </div>
+        <textarea asp-for="Contract.Comment" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="input-group w-100">
+        <input class="btn btn-outline-primary w-100" type="submit" value="Забронировать" />
+    </div>
+
+</form>
+
+<form asp-page-handler="NewDriver" asp-route-start="@Model.Contract!.Start" asp-route-finish="@Model.Contract.Finish">
+
+    <input asp-for="Contract.CarId" type="hidden" />
+
+    <div class="modal fade bd-example-modal-lg" id="newDriverModal" tabindex="-1" role="dialog" aria-labelledby="newDriverModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Добавить водителя</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-3">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Driver.LastName)</span>
+                        </div>
+                        <input asp-for="Driver.LastName" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-3">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Driver.FirstName)</span>
+                        </div>
+                        <input asp-for="Driver.FirstName" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-3">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Driver.PhoneNumber)</span>
+                        </div>
+                        <input asp-for="Driver.PhoneNumber" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6 col-md-4">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Driver.Comment)</span>
+                        </div>
+                        <textarea asp-for="Driver.Comment" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <input class="btn btn-outline-primary" type="submit" value="Добавить" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>

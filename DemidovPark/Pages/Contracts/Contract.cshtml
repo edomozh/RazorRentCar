@@ -1,0 +1,274 @@
+﻿@page
+@using DemidovPark.Data;
+@using DemidovPark.Helpers
+@model ContractModel
+@{
+    ViewData["Title"] = "Edit Contract";
+}
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="row">
+    <div class="col-12 col-md-4">
+        <div class="card m-1">
+
+            <div class="card-header">
+                <h5 class="card-title">Аренда: @Model.Contract?.Car?.Name</h5>
+            </div>
+
+            <div class="">
+                <table class="table w-100 mb-0">
+                    <tbody>
+                        <tr>
+                            <td>@Html.DisplayNameFor(m => m.Contract.CarId)</td>
+                            <td><a class="nav-link p-0" asp-area="" asp-page="/Cars/Car" asp-route-id="@Model.Contract?.Car?.Id">@Model.Contract?.Car?.Name</a></td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(m => m.Contract.DriverId)</td>
+                            <td> <a class="nav-link p-0" asp-area="" asp-page="/Drivers/Driver" asp-route-id="@Model.Contract?.Driver?.Id">@Model.Contract?.Driver?.FullName</a> </td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(m => m.Contract.Start)</td>
+                            <td>@Model.Contract?.Start</td>
+                        </tr>
+                        @if (Model.Contract is not null && !Model.Contract.Endless)
+                        {
+                            <tr>
+                                <td>@Html.DisplayNameFor(m => m.Contract.Finish)</td>
+                                <td>@Model.Contract?.Finish</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td>@Html.DisplayNameFor(m => m.Contract.Deposit)</td>
+                            <td>@Model.Contract?.Deposit!.Calc()</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(m => m.Contract.Penalty)</td>
+                            <td>@Model.Contract?.Penalty!.Calc()</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(m => m.Contract.Debt)</td>
+                            <td>@Model.Contract?.Debt</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(m => m.Contract.Comment)</td>
+                            <td style="white-space:pre-wrap">@Model.Contract?.Comment</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-footer">
+                <div class="btn-wrapper text-center d-flex">
+
+                    <a class="btn btn-outline-primary m-1" asp-page="/Contracts/ContractEdit" asp-route-id="@Model.Contract?.Id">Редактировать</a>
+
+                    @if (Model.Contract?.Payments.Count == 0)
+                    {
+                        <form asp-page-handler="Cancel">
+                            <input asp-for="Contract.Id" type="hidden" />
+                            <input class="btn btn-outline-dark m-1" type="submit" value="Отменить" />
+                        </form>
+                    }
+                    else if (Model.Contract?.Debt > 0)
+                    {
+                        <form asp-page-handler="SaveDebt">
+                            <input asp-for="Contract.Id" type="hidden" />
+                            <input class="btn btn-outline-danger m-1" type="submit" value="Сохранить долг" />
+                        </form>
+                    }
+                    else if (Model.Contract?.Finished != true)
+                    {
+                        <form asp-page-handler="Finish">
+                            <input asp-for="Contract.Id" type="hidden" />
+                            <input id="close" class="btn btn-outline-success m-1" type="submit" value="Завершить" />
+                        </form>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-12 col-md-8">
+        <div class="card m-1">
+            <div class="card-header">
+                <h5 class="card-title">Платежи</h5>
+            </div>
+
+            <div class="">
+                <table class="w-100 table table-bordered text-break table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th data-field="date">@Html.DisplayNameFor(m => m.Contract.Payments.First().Date)</th>
+                            <th data-field="date">@Html.DisplayNameFor(m => m.Contract.Payments.First().PaymentDate)</th>
+                            <th data-field="type">@Html.DisplayNameFor(m => m.Contract.Payments.First().PaymentType)</th>
+                            <th data-field="paid">@Html.DisplayNameFor(m => m.Contract.Payments.First().Paid)</th>
+                            <th data-field="income">@Html.DisplayNameFor(m => m.Contract.Payments.First().Income)</th>
+                            <th data-field="myincome">@Html.DisplayNameFor(m => m.Contract.Payments.First().MyIncome)</th>
+                            <th data-field="debt">@Html.DisplayNameFor(m => m.Contract.Payments.First().Debt)</th>
+                            <th data-field="comment">@Html.DisplayNameFor(m => m.Contract.Payments.First().Comment)</th>
+                            @if (Model.Contract?.Finished != true)
+                            {
+                                <th data-field="edit"></th>
+                                <th data-field="delete"></th>
+                            }
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var payment in Model.Contract!.Payments)
+                        {
+                            @if (Model.EditPayment.Id != payment.Id)
+                            {
+                                <tr>
+                                    <td class="text-nowrap text-center">@payment.Date.ToString("d")</td>
+                                    <td>@payment.PaymentDate </td>
+                                    <td>@payment.PaymentType</td>
+                                    <td>@payment.Paid?.Calc()</td>
+                                    <td>@payment.Income</td>
+                                    <td>@payment.MyIncome</td>
+                                    <td>@payment.Debt</td>
+                                    <td>@payment.Comment</td>
+
+                                    @if (!Model.Contract.Finished)
+                                    {
+                                        <form asp-page-handler="EditPayment" asp-route-id="@payment.Id">
+                                            <input asp-for="Contract.Id" type="hidden" />
+                                        <td class="p-0">
+                                            <button type="submit" class="btn btn-sm btn-outline-primary w-100 h-100">
+                                                <svg width="24" height="24" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                        </form>
+
+                                        <form asp-page-handler="DeletePayment" asp-route-id="@payment.Id">
+                                            <input asp-for="Contract.Id" type="hidden" />
+                                        <td class="p-0">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger w-100 h-100">
+                                                <svg width="24" height="24" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                        </form>
+                                    }
+                                </tr>
+                            }
+                            else
+                            {
+                                <form asp-page-handler="SavePayment" asp-route-paymentdate="@payment.Date">
+                                    <input asp-for="EditPayment.Id" type="hidden" />
+                                    <input asp-for="EditPayment.ContractId" type="hidden" />
+                                    <input asp-for="EditPayment.Date" type="hidden" />
+                                <tr>
+                                    <td class="text-nowrap text-center">@payment.Date.ToString("d")</td>
+                                    <td class="p-0"><input asp-for="EditPayment.PaymentDate" style="width:10px" class="w-100" /></td>
+                                    <td class="p-0"><input asp-for="EditPayment.PaymentType" style="width:10px" class="w-100" /></td>
+                                    <td class="p-0"><input asp-for="EditPayment.Paid" style="width:10px" class="w-100" /></td>
+                                    <td class="p-0"><input asp-for="EditPayment.Income" style="width:10px" class="w-100" /></td>
+                                    <td class="p-0"></td>
+                                    <td class="p-0"><input asp-for="EditPayment.Debt" style="width:10px" class="w-100" /></td>
+                                    <td class="p-0"><input asp-for="EditPayment.Comment" style="width:10px" class="w-100" /></td>
+                                    <td class="p-0">
+                                        <button type="submit" class="btn btn-sm btn-outline-success w-100 h-100">
+                                            <svg width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"></path>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                </form>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-footer">
+                <div class="btn-wrapper text-center d-flex">
+                    @if (Model.Contract.Endless || !Model.Contract.Finished && Model.TotalDays - Model.Contract.Payments.Count > 0)
+                    {
+                        <input class="btn btn-outline-primary" type="submit" value="Добавить оплату" data-bs-toggle="modal" data-bs-target="#modal" />
+                    }
+                    @if (!Model.Contract.Endless && !Model.Contract.Finished && Model.TotalDays - Model.Contract.Payments.Count <= 0)
+                    {
+                        <p>Увеличьте срок аренды</p>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form asp-page-handler="NewPayment" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Добавить оплату <div class="text-black-50">осталось @(Model.TotalDays - Model.Contract.Payments.Count) дней</div></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input asp-for="Contract.Id" type="hidden" />
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">Добавить дней?</span>
+                        </div>
+                        <input name="days" type="number" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewPayment.PaymentDate)</span>
+                        </div>
+                        <input asp-for="NewPayment.PaymentDate" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewPayment.PaymentType)</span>
+                        </div>
+                        <input asp-for="NewPayment.PaymentType" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewPayment.Paid)</span>
+                        </div>
+                        <input asp-for="NewPayment.Paid" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewPayment.Income)</span>
+                        </div>
+                        <input asp-for="NewPayment.Income" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewPayment.Debt)</span>
+                        </div>
+                        <input asp-for="NewPayment.Debt" class="form-control">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <input class="btn btn-outline-primary" type="submit" value="Добавить" />
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

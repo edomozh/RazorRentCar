@@ -1,0 +1,53 @@
+﻿@page
+@model DriverEditModel
+@{
+    ViewData["Title"] = "Edit Driver";
+}
+
+
+<form method="post">
+
+    <input asp-for="Driver.Id" type="hidden" />
+    <input asp-for="Driver.CreatedDate" type="hidden" />
+    <input asp-for="Driver.UpdatedDate" type="hidden" />
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Driver.FirstName)</span>
+        </div>
+        <input asp-for="Driver.FirstName" class="form-control">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Driver.LastName)</span>
+        </div>
+        <input asp-for="Driver.LastName" class="form-control">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Driver.PhoneNumber)</span>
+        </div>
+        <input asp-for="Driver.PhoneNumber" class="form-control">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Driver.Comment)</span>
+        </div>
+        <textarea asp-for="Driver.Comment" rows="3" class="form-control"></textarea>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Driver.Debt)</span>
+        </div>
+        <input asp-for="Driver.Debt" class="form-control">
+    </div>
+
+    <div class="mb-3 w-100">
+        <input class="btn btn-outline-primary col-3" type="submit" value="Сохранить" />
+    </div>
+
+</form>

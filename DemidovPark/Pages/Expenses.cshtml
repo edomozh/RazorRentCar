@@ -1,0 +1,73 @@
+﻿@page
+@model ExpensesModel
+@{
+    ViewData["Title"] = "Expenses";
+}
+
+<form method="post" asp-page-handler="Month">
+
+    <div class="input-group mb-3 m-1">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">Выберите месяц</span>
+        </div>
+        <input asp-for="Month" class="form-control" />
+        <div class="input-group-prepend col-3">
+            <input type="submit" class="btn btn-outline-primary col-1 w-100 h-100" value="Показать" />
+        </div>
+    </div>
+</form>
+
+<table class="table table-bordered text-break">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Expenses.First().CarId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Expenses.First().Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Expenses.First().Value)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Expenses.First().Comment)
+            </th>
+            @if (User.IsInRole("admin"))
+            {
+                <th></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var expense in Model.Expenses)
+        {
+            <tr class="">
+                <td>
+                    @Html.DisplayFor(m => expense.Car!.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => expense.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => expense.Value)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => expense.Comment)
+                </td>
+                @if (User.IsInRole("admin"))
+                {
+                    <form asp-page-handler="Remove" asp-route-id="@expense.Id">
+                    <td class="p-0">
+                        <button type="submit" class="btn btn-outline-danger w-100 h-100">
+                            <svg width="24" height="24" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                            </svg>
+                        </button>
+                    </td>
+                    </form>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

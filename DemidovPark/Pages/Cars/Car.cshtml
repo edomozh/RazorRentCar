@@ -1,0 +1,308 @@
+﻿@page
+@using System.Globalization
+@using DemidovPark.Helpers
+@model CarModel
+@{
+    ViewData["Title"] = "Car";
+}
+
+<div class="row">
+
+    <div class="col-12 col-md-4">
+
+        <div class="card m-1 p-0">
+            <div class="card-header">
+                <h5 class="card-title">@Model.Car.Name</h5>
+            </div>
+
+            <img src="@Url.Action("GetPhoto", "Photos", new { id = @Model.Car.PhotoId })" onerror="this.style.display='none'" />
+
+            <div class="card-block">
+                <table class="table w-100 mb-0">
+                    <tbody>
+                        <tr>
+                            <td>@Html.DisplayNameFor(m => m.Car.SegmentId)</td>
+                            <td>@Model.Car.Segment?.Name</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(m => m.Car.Rate)</td>
+                            <td>@Model.Car.Rate</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(m => m.Car.Comment)</td>
+                            <td style="white-space:pre-wrap">@Model.Car.Comment</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(m => m.Car.PublicDescription)</td>
+                            <td style="white-space:pre-wrap">@Model.Car.PublicDescription</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.DisplayNameFor(m => m.Car.Color)</td>
+                            <td><div class="d-inline rounded form-control" style="background-color:@Model.Car.Color"> &nbsp; </div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-footer">
+                <div class="btn-wrapper text-center d-flex">
+
+                    <a class="btn btn-outline-primary m-1" asp-page="/Cars/CarEdit" asp-route-id="@Model.Car.Id" title="Редактировать">
+                        <svg width="24" height="24" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                        </svg>
+                    </a>
+
+                    <a class="btn btn-outline-primary m-1" asp-page="/Contracts/ContractNew" asp-route-carid="@Model.Car.Id" title="Забронировать">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-shield" viewBox="0 0 16 16">
+                            <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z" />
+                        </svg>
+                    </a>
+
+                    <a class="btn btn-outline-primary m-1" asp-page="/Cars/Maintenance" asp-route-id="@Model.Car.Id" title="Сервис">
+                        <svg width="24" height="24" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                            <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
+                            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
+                        </svg>
+                    </a>
+
+                    <button class="btn btn-outline-primary m-1" type="submit" data-bs-toggle="modal" data-bs-target="#modalExpense" title="добавить расход">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cash-coin" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M11 15a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-4a5 5 0 1 1-10 0 5 5 0 0 1 10 0z" />
+                            <path d="M9.438 11.944c.047.596.518 1.06 1.363 1.116v.44h.375v-.443c.875-.061 1.386-.529 1.386-1.207 0-.618-.39-.936-1.09-1.1l-.296-.07v-1.2c.376.043.614.248.671.532h.658c-.047-.575-.54-1.024-1.329-1.073V8.5h-.375v.45c-.747.073-1.255.522-1.255 1.158 0 .562.378.92 1.007 1.066l.248.061v1.272c-.384-.058-.639-.27-.696-.563h-.668zm1.36-1.354c-.369-.085-.569-.26-.569-.522 0-.294.216-.514.572-.578v1.1h-.003zm.432.746c.449.104.655.272.655.569 0 .339-.257.571-.709.614v-1.195l.054.012z" />
+                            <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z" />
+                            <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z" />
+                        </svg>
+                    </button>
+
+                    <button class="btn btn-outline-primary m-1" type="submit" value="Добавить" data-bs-toggle="modal" data-bs-target="#modalMileage" title="добавить пробег">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-repeat" viewBox="0 0 16 16">
+                            <path d="M11 5.466V4H5a4 4 0 0 0-3.584 5.777.5.5 0 1 1-.896.446A5 5 0 0 1 5 3h6V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192Zm3.81.086a.5.5 0 0 1 .67.225A5 5 0 0 1 11 13H5v1.466a.25.25 0 0 1-.41.192l-2.36-1.966a.25.25 0 0 1 0-.384l2.36-1.966a.25.25 0 0 1 .41.192V12h6a4 4 0 0 0 3.585-5.777.5.5 0 0 1 .225-.67Z" />
+                        </svg>
+                    </button>
+
+                    @if (@Model.Car.Contracts.Count() == 0)
+                    {
+                        <form asp-page-handler="DeleteCar" asp-route-id="@Model.Car.Id">
+                            <input asp-for="Car.Id" type="hidden" />
+
+                            <button type="submit" class="btn m-1 btn-outline-danger" title="Удалить">
+                                <svg width="24" height="24" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                </svg>
+                            </button>
+                        </form>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card m-1 p-0">
+
+            <div class="card-header">
+                <h5 class="card-title">@Html.DisplayNameFor(m => m.Car.Contracts)</h5>
+            </div>
+
+            <div class="card-block">
+                <table class="table table-bordered text-break table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th data-field="Driver" data-filter-control="text">@Html.DisplayNameFor(m => m.Car.Contracts.First().ViewName)</th>
+                            <th data-field="start" data-filter-control="input">@Html.DisplayNameFor(m => m.Car.Contracts.First().Start)</th>
+                            <th data-field="finish" data-filter-control="input">@Html.DisplayNameFor(m => m.Car.Contracts.First().Finish)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var Contract in Model.Car.Contracts)
+                        {
+                            <tr>
+                                <td><a class="nav-link p-0" asp-area="" asp-page="/Contracts/Contract" asp-route-id="@Contract.Id">@Contract.ViewName</a></td>
+                                <td>@Contract.Start.ToShortDateString()</td>
+                                <td>
+                                    @if (!@Contract.Endless)
+                                    {
+                                        @Contract.Finish.ToShortDateString()
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-12 col-md-8">
+
+        <form method="post" asp-page-handler="Month">
+            <input asp-for="Car.Id" type="hidden" />
+            <div class="input-group mb-3 m-1">
+                <div class="input-group-prepend col-3">
+                    <span class="input-group-text h-100">Выберите месяц</span>
+                </div>
+                <input asp-for="Month" class="form-control" />
+                <div class="input-group-prepend col-3">
+                    <input type="submit" class="btn btn-outline-primary col-1 w-100 h-100" value="Показать" />
+                </div>
+            </div>
+        </form>
+
+
+        <div class="card m-1 p-0">
+
+            <div class="card-header">
+                <h5 class="card-title">@Html.DisplayNameFor(m => m.Payments)</h5>
+            </div>
+            <div class="card-block">
+                <table class="table table-bordered text-break table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th data-field="date">@Html.DisplayNameFor(m => m.Payments.First().Contract!.DriverId)</th>
+                            <th data-field="date">@Html.DisplayNameFor(m => m.Payments.First().Date)</th>
+                            <th data-field="date">@Html.DisplayNameFor(m => m.Payments.First().PaymentDate)</th>
+                            <th data-field="type">@Html.DisplayNameFor(m => m.Payments.First().PaymentType)</th>
+                            <th data-field="paid">@Html.DisplayNameFor(m => m.Payments.First().Paid)</th>
+                            <th data-field="income">@Html.DisplayNameFor(m => m.Payments.First().Income)</th>
+                            <th data-field="myincome">@Html.DisplayNameFor(m => m.Payments.First().MyIncome)</th>
+                            <th data-field="debt">@Html.DisplayNameFor(m => m.Payments.First().Debt)</th>
+                            <th data-field="comment">@Html.DisplayNameFor(m => m.Payments.First().Comment)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var payment in Model.Payments)
+                        {
+                            <tr>
+                                <td>@payment.Contract!.Driver!.FullName</td>
+                                <td class="text-nowrap text-center">@payment.Date.ToString("d")</td>
+                                <td>@payment.PaymentDate </td>
+                                <td>@payment.PaymentType</td>
+                                <td>@payment.Paid?.Calc()</td>
+                                <td>@payment.Income</td>
+                                <td>@payment.MyIncome</td>
+                                <td>@payment.Debt</td>
+                                <td>@payment.Comment</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card m-1 p-0">
+
+            <div class="card-header">
+                <h5 class="card-title">@Html.DisplayNameFor(m => m.Car.Expenses)</h5>
+            </div>
+
+            <div class="card-block">
+                <table class="table table-bordered text-break table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th data-field="Driver" data-filter-control="text">@Html.DisplayNameFor(m => m.Car.Expenses.First().Date)</th>
+                            <th data-field="start" data-filter-control="input">@Html.DisplayNameFor(m => m.Car.Expenses.First().Value)</th>
+                            <th data-field="finish" data-filter-control="input">@Html.DisplayNameFor(m => m.Car.Expenses.First().Comment)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var expense in Model.Car.Expenses)
+                        {
+                            <tr>
+                                <td>@expense.Date.ToShortDateString()</td>
+                                <td>@expense.Value</td>
+                                <td>@expense.Comment</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="modalExpense" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form asp-page-handler="AddExpense" method="post" asp-route-id="@Model.Car.Id">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Добавить @Html.DisplayNameFor(m => m.NewExpense)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input asp-for="Car.Id" type="hidden" />
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewExpense.Date)</span>
+                        </div>
+                        <input asp-for="NewExpense.Date" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewExpense.Value)</span>
+                        </div>
+                        <input asp-for="NewExpense.Value" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewExpense.Comment)</span>
+                        </div>
+                        <textarea asp-for="NewExpense.Comment" class="form-control" rows="3"></textarea>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <input class="btn btn-outline-primary" type="submit" value="Добавить" />
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="modalMileage" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form asp-page-handler="AddMileage" method="post" asp-route-id="@Model.Car.Id">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Добавить @Html.DisplayNameFor(m => m.NewMileage)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input asp-for="Car.Id" type="hidden" />
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewMileage.Date)</span>
+                        </div>
+                        <input asp-for="NewMileage.Date" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewMileage.Value)</span>
+                        </div>
+                        <input asp-for="NewMileage.Value" class="form-control">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <input class="btn btn-outline-primary" type="submit" value="Добавить" />
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

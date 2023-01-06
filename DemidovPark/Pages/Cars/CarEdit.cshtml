@@ -1,0 +1,89 @@
+﻿@page
+@model CarEdit
+@{
+    ViewData["Title"] = "Edit Car";
+}
+
+<form method="post" enctype="multipart/form-data">
+
+    <input asp-for="Car.Id" type="hidden" />
+    <input asp-for="Car.PhotoId" type="hidden" />
+    <input asp-for="Car.CreatedDate" type="hidden" />
+    <input asp-for="Car.UpdatedDate" type="hidden" />
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">Фото</span>
+        </div>
+        <input asp-for="Photo.FormFile" class="form-control" type="file" accept="image/jpeg" />
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Car.Name)</span>
+        </div>
+        <input asp-for="Car.Name" class="form-control">
+    </div>
+
+        <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Car.PublicName)</span>
+        </div>
+        <input asp-for="Car.PublicName" class="form-control">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">Сегмент</span>
+        </div>
+        <select asp-for="Car.SegmentId" asp-items="Model.Segments" class="form-control">
+            <option>Выберите @Html.DisplayNameFor(m => m.Car.SegmentId)</option>
+        </select>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Car.Rate)</span>
+        </div>
+        <input asp-for="Car.Rate" class="form-control">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-6 col-md-3">
+            <span class="input-group-text h-100">Комментарии</span>
+        </div>
+        <textarea asp-for="Car.Comment" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Car.PublicDescription)</span>
+        </div>
+        <textarea asp-for="Car.PublicDescription" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">Цвет</span>
+        </div>
+        <input asp-for="Car.Color" type="color" class="form-control-color" style="border:0px">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <div class="input-group-text">
+                <span>В архиве</span>
+            </div>
+        </div>
+        <div class="input-group-append">
+            <div class="input-group-text h-100">
+                <input asp-for="Car.Archive" type="checkbox" class="form-check-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="input-group w-100">
+        <input class="btn btn-outline-primary col-3" type="submit" value="Сохранить" />
+    </div>
+
+</form>

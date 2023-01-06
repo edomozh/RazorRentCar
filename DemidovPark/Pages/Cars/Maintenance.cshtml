@@ -1,0 +1,298 @@
+﻿@page
+@using System.Globalization
+@model MaintenanceModel
+@{
+    ViewData["Title"] = "Car";
+}
+
+<div class="row">
+
+    <div class="col-12 col-md-4">
+
+        <div class="card m-1 p-0">
+
+            <div class="card-header">
+                <h5 class="card-title"><a class="nav-link p-0" asp-area="" asp-page="/Cars/Car" asp-route-id="@Model.Car.Id">@Model.Car.Name</a></h5>
+            </div>
+
+            <div class="card-block">
+                <table class="w-100 table table-bordered text-break table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th data-field="date">@Html.DisplayNameFor(m => m.Car.Maintenances.First().Name)</th>
+                            <th data-field="value">@Html.DisplayNameFor(m => m.Car.Maintenances.First().Descr)</th>
+                            <th data-field="value">@Html.DisplayNameFor(m => m.Car.Maintenances.First().MileageStep)</th>
+                            <th data-field="button"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var service in Model.Car.Maintenances)
+                        {
+                            <tr>
+                                <td>@service.Name</td>
+                                <td>@service.Descr</td>
+                                <td>@service.MileageStep</td>
+                                <td class="p-0">
+                                    <form asp-page-handler="DeleteService" asp-route-id="@service.Id">
+                                        <input asp-for="Car.Id" type="hidden" />
+
+                                        <button type="submit" class="btn btn-sm btn-outline-danger w-100 h-100" title="Удалить">
+                                            <svg width="24" height="24" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-footer">
+                <div class="btn-wrapper text-center d-flex">
+                    <input class="btn btn-outline-primary" type="submit" value="Добавить" data-bs-toggle="modal" data-bs-target="#modalService" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-12 col-md-4">
+        <div class="card m-1 p-0">
+
+            <div class="card-header">
+                <h5 class="card-title">@Html.DisplayNameFor(m => m.Car.History)</h5>
+            </div>
+
+            <div class="card-block">
+                <table class="w-100 table table-bordered text-break table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th data-field="date">@Html.DisplayNameFor(m => m.Car.History.First().Date)</th>
+                            <th data-field="name">@Html.DisplayNameFor(m => m.Car.History.First().Maintenance!.Name)</th>
+                            <th data-field="milleage">@Html.DisplayNameFor(m => m.Car.History.First().Mileage)</th>
+                            <th data-field="next">@Html.DisplayNameFor(m => m.Car.History.First().Next)</th>
+                            <th data-field="button"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var hist in Model.Car.History)
+                        {
+                            <tr>
+                                <td>@hist.Date.ToString("d")</td>
+                                <td>@hist.Maintenance?.Name</td>
+                                <td>@hist.Mileage</td>
+                                <td>@hist.Next</td>
+                                <td class="p-0">
+                                    <form asp-page-handler="DeleteHistory" asp-route-id="@hist.Id">
+                                        <input asp-for="Car.Id" type="hidden" />
+
+                                        <button type="submit" class="btn btn-sm btn-outline-danger w-100 h-100" title="Удалить">
+                                            <svg width="24" height="24" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-footer">
+                @if (Model.Services.Any())
+                {
+                    <div class="btn-wrapper text-center d-flex">
+                        <input class="btn btn-outline-primary" type="submit" value="Добавить" data-bs-toggle="modal" data-bs-target="#modalHistory" />
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-4">
+        <div class="card m-1 p-0">
+
+            <div class="card-header">
+                <h5 class="card-title">@Html.DisplayNameFor(m => m.Car.Mileages)</h5>
+            </div>
+
+            <div class="card-block">
+                <table class="w-100 table table-bordered text-break table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th data-field="date">@Html.DisplayNameFor(m => m.Car.Mileages.First().Date)</th>
+                            <th data-field="value">@Html.DisplayNameFor(m => m.Car.Mileages.First().Value)</th>
+                            <th data-field="button"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var mileage in Model.Car.Mileages)
+                        {
+                            <tr>
+                                <td>@mileage.Date.ToString("d")</td>
+                                <td>@mileage.Value</td>
+                                <td class="p-0">
+                                    <form asp-page-handler="DeleteMilleage" asp-route-id="@mileage.Id">
+                                        <input asp-for="Car.Id" type="hidden" />
+
+                                        <button type="submit" class="btn btn-sm btn-outline-danger w-100 h-100" title="Удалить">
+                                            <svg width="24" height="24" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card-footer">
+                <div class="btn-wrapper text-center d-flex">
+                    <input class="btn btn-outline-primary" type="submit" value="Добавить" data-bs-toggle="modal" data-bs-target="#modalMileage" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="modalService" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form asp-page-handler="AddService" method="post" asp-route-id="@Model.Car.Id">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Добавить</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input asp-for="Car.Id" type="hidden" />
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewService.Name)</span>
+                        </div>
+                        <input asp-for="NewService.Name" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewService.Descr)</span>
+                        </div>
+                        <input asp-for="NewService.Descr" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewService.MileageStep)</span>
+                        </div>
+                        <input asp-for="NewService.MileageStep" class="form-control">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <input class="btn btn-outline-primary" type="submit" value="Добавить" />
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="modalHistory" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form asp-page-handler="AddHistory" method="post" asp-route-id="@Model.Car.Id">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Добавить</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input asp-for="Car.Id" type="hidden" />
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">Обслуживание</span>
+                        </div>
+                        <select asp-for="NewHistory.MaintenanceId" asp-items="Model.Services" class="form-control"></select>
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewHistory.Date)</span>
+                        </div>
+                        <input asp-for="NewHistory.Date" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewHistory.Mileage)</span>
+                        </div>
+                        <input asp-for="NewHistory.Mileage" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewHistory.Next)</span>
+                        </div>
+                        <input asp-for="NewHistory.Next" class="form-control">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <input class="btn btn-outline-primary" type="submit" value="Добавить" />
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="modalMileage" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form asp-page-handler="AddMileage" method="post" asp-route-id="@Model.Car.Id">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Добавить</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input asp-for="Car.Id" type="hidden" />
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewMileage.Date)</span>
+                        </div>
+                        <input asp-for="NewMileage.Date" class="form-control">
+                    </div>
+
+                    <div class="input-group p-3">
+                        <div class="input-group-prepend col-6">
+                            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.NewMileage.Value)</span>
+                        </div>
+                        <input asp-for="NewMileage.Value" class="form-control">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <input class="btn btn-outline-primary" type="submit" value="Добавить" />
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+﻿@page
+@model ReportModel
+@{
+    ViewData["Title"] = "Report";
+}
+
+<form method="post">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">Выберите месяц</span>
+        </div>
+        <input asp-for="Month" class="form-control" />
+        <div class="input-group-prepend col-3">
+            <input type="submit" class="btn btn-outline-primary col-1 w-100 h-100" value="Показать"/>
+        </div>
+    </div>
+</form>
+
+@if (ViewData["Paid"] is not null)
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Оплачено</th>
+                <th class="text-break">Доход инвесторов</th>
+                <th>Мой доход</th>
+                <th>Долги</th>
+                <th>Расходы</th>
+                <th class="text-break">Сумма долга всех клиентов</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td>@ViewData["Paid"]</td>
+                <td>@ViewData["Income"]</td>
+                <td>@ViewData["MyIncome"]</td>
+                <td>@ViewData["Debt"]</td>
+                <td>@ViewData["Expense"]</td>
+                <td>@ViewData["DriversDebt"]</td>
+            </tr>
+
+        </tbody>
+    </table>
+}

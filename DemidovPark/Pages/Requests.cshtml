@@ -1,0 +1,68 @@
+﻿@page
+@model RequestsModel
+@{
+    ViewData["Title"] = "Requests";
+}
+
+<table class="table table-bordered text-break">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Requests.First().Car)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Requests.First().Start)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Requests.First().Finish)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Requests.First().PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Requests.First().Distance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Requests.First().Comment)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var request in Model.Requests)
+        {
+            <tr class="bg-@(request.Processed ? "white" : "danger") bg-opacity-50">
+                <td>
+                    @Html.DisplayFor(m => request.Car!.Name)
+                </td>
+                <td>
+                    @request.Start.ToShortDateString()
+                </td>
+                <td>
+                    @request.Finish.ToShortDateString()
+                </td>
+                <td>
+                    @Html.DisplayFor(m => request.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => request.Distance!.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => request.Comment)
+                </td>
+                @if (!request.Processed)
+                {
+                    <form asp-page-handler="Proceed" asp-route-id="@request.Id">
+                    <td class="p-0">
+                        <button type="submit" class="btn btn-outline-success w-100 h-100">
+                            <svg width="24" height="24" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z" />
+                            </svg>
+                        </button>
+                    </td>
+                    </form>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

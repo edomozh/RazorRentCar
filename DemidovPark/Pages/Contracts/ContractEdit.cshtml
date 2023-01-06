@@ -1,0 +1,98 @@
+﻿@page
+@model ContractEditModel
+@{
+    ViewData["Title"] = "Edit Contract";
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div>
+    <h1>Аренда: @Model.Contract?.Car?.Name</h1>
+</div>
+
+<form method="post">
+
+    <input asp-for="Contract.Id" type="hidden" />
+    <input asp-for="Contract.CarId" type="hidden" />
+
+    <div class="row mb-3">
+        <div class="col-12 col-md-6">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text h-100">От</span>
+                </div>
+                <input asp-for="Contract.Start" class="form-control" />
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6" id="Block_Finish">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text h-100">До</span>
+                </div>
+                <input asp-for="Contract.Finish" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <div class="input-group-text">
+                <span>@Html.DisplayNameFor(m => m.Contract.Endless)</span>
+            </div>
+        </div>
+        <div class="input-group-append">
+            <div class="input-group-text h-100">
+                <input asp-for="Contract.Endless" type="checkbox" class="form-check-input" onclick="calcAvailability('Block_Finish', this.checked)">
+            </div>
+        </div>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">Водитель</span>
+        </div>
+        <select asp-for="Contract.DriverId" asp-items="Model.Drivers" class="form-control">
+            <option>Выберите водителя</option>
+        </select>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Contract.Deposit)</span>
+        </div>
+        <input asp-for="Contract.Deposit" class="form-control">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Contract.Penalty)</span>
+        </div>
+        <input asp-for="Contract.Penalty" class="form-control">
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <span class="input-group-text h-100">@Html.DisplayNameFor(m => m.Contract.Comment)</span>
+        </div>
+        <textarea asp-for="Contract.Comment" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend col-3">
+            <div class="input-group-text">
+                <span>@Html.DisplayNameFor(m => m.Contract.Finished)</span>
+            </div>
+        </div>
+        <div class="input-group-append">
+            <div class="input-group-text h-100">
+                <input asp-for="Contract.Finished" type="checkbox" class="form-check-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="input-group w-100">
+        <input class="btn btn-outline-primary col-3" type="submit" value="Сохранить" />
+    </div>
+
+</form>

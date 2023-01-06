@@ -1,0 +1,29 @@
+﻿@page
+@model DriversModel
+@{
+    ViewData["Title"] = "Drivers";
+}
+
+<table id="filterabletable"
+       data-filter-control="true"
+       data-show-search-clear-button="false">
+    <thead>
+        <tr>
+            <th data-field="fullname" data-filter-control="input">Водитель</th>
+            <th data-field="phone" data-filter-control="input">Телефон</th>
+            <th data-field="comment" data-filter-control="input">Коммент</th>
+            <th data-field="debt">Долг</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var driver in Model.Drivers)
+        {
+            <tr class="bg-@driver.Color bg-opacity-50">
+                <td><a class="nav-link text-primary" asp-area="" asp-page="/Drivers/Driver" asp-route-id="@driver.Id">@driver.FullName</a></td>
+                <td>@driver.PhoneNumber</td>
+                <td>@driver.Comment</td>
+                <td>@driver.Debt</td>
+            </tr>
+        }
+    </tbody>
+</table>
