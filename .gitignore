@@ -454,16 +454,63 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 
 # Data Base
-/DemidovPark/db/DemidovPark.db-wal
-/DemidovPark/db/DemidovPark.db-shm
-/DemidovPark/db/DemidovPark.db
+/RentApp/db/RentApp.db-wal
+/RentApp/db/RentApp.db-shm
+/RentApp/db/RentApp.db
 
 # Images
-/DemidovPark/wwwroot/img/*
+/RentApp/wwwroot/img/*
 
 # Settings
-/DemidovPark/appsettings.json
-/DemidovPark/appsettings.Development.json
+/RentApp/appsettings.json
+/RentApp/appsettings.Development.json
 
 # Logfile
-/DemidovPark/logfile.txt
+/RentApp/logfile.txt
+
+# Documents
+Docs/*
+
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# Compiled output
+RentAppClient/dist
+RentAppClient/tmp
+RentAppClient/out-tsc
+RentAppClient/bazel-out
+
+# Node
+RentAppClient/node_modules
+RentAppClient/npm-debug.log
+RentAppClient/yarn-error.log
+
+# IDEs and editors
+RentAppClient/.idea/
+RentAppClient/.project
+RentAppClient/.classpath
+RentAppClient/.c9/
+RentAppClient/*.launch
+RentAppClient/.settings/
+RentAppClient/*.sublime-workspace
+
+# Visual Studio Code
+RentAppClient/.vscode/*
+RentAppClient/!.vscode/settings.json
+RentAppClient/!.vscode/tasks.json
+RentAppClient/!.vscode/launch.json
+RentAppClient/!.vscode/extensions.json
+RentAppClient/.history/*
+
+# Miscellaneous
+RentAppClient/.angular/cache
+RentAppClient/.sass-cache/
+RentAppClient/connect.lock
+RentAppClient/coverage
+RentAppClient/libpeerconnection.log
+RentAppClient/testem.log
+RentAppClient/typings
+
+# System files
+RentAppClient/.DS_Store
+RentAppClient/Thumbs.db
+
